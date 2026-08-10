@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Social Network{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="post">
+        <div class="post-header">
+            <img src="{{ url_for('static', filename='profile_pic.svg') }}" alt="User">
+            <div class="user-info">
+                <strong>{{ user.first_name }} {{ user.last_name }}</strong>
+            </div>
+        </div>
+        <div class="post-actions">
+<!--            <button type="submit">Post</button>-->
+            <a href="/message?to={{ user.id }}">Message</a>
+        </div>
+    </div>
+    {% if user.id == session["user_id"] %}
+    <form action="/post" method="post">
+        <div class="post">
+            <div class="post-content">
+                <label>
+                    <textarea dir="auto" oninput="this.style.height='';this.style.height=this.scrollHeight + 'px';"
+                              style="resize: none; width: 100%; overflow: hidden" name="text" required></textarea>
+                </label>
+            </div>
+            <div class="post-actions">
+                <button type="submit">Post</button>
+            </div>
+        </div>
+    </form>
+    {% endif %}
+    <div class="post">
+        <div style="padding: 18px; display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr; text-align: center">
+            <a href="/profile/{{ user.id }}?page={{ prev_page }}" {% if is_first_page %} class="disabled" {% endif %}>Previous</a>
+            <p>Page {{ page }} of {{ num_pages }}</p>
+            <a href="/profile/{{ user.id }}?page={{ next_page }}" {% if is_last_page %} class="disabled" {% endif %}>Next</a>
+        </div>
+    </div>
+    {% for post in posts %}
+    <div class="post">
+        <div class="post-header">
+            <img src="{{ url_for('static', filename='profile_pic.svg') }}" alt="User">
+            <div class="user-info">
+                <a href="/profile/{{ post.user_id }}"><strong>{{ post.user.first_name }} {{ post.user.last_name
+                    }}</strong></a>
+                <span>{{ get_diff_time_string(now, post.created_at) }}</span>
+            </div>
+        </div>
+        <div dir="auto" class="post-content">
+            {{ post.text }}
+            <!--            <img src="https://via.placeholder.com/600x300" alt="Post Image">-->
+        </div>
+        <div class="post-actions">
+            {% if is_liked_by_user(post, user) %}
+            <a style="color: #1d4ed8" href="/like?post_id={{ post.id }}">👍 Like</a>
+            {% else %}
+            <a href="/like?post_id={{ post.id }}">👍 Like</a>
+            {% endif %}
+            <a href="/post/{{ post.id }}">💬 Comment</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

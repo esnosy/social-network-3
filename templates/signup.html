@@ -1,0 +1,278 @@
+{% extends "base.html" %}
+
+{% block title %}Signup{% endblock %}
+
+
+{% block body %}
+<div class="signup-wrapper">
+    <main class="signup-card">
+        <div class="signup-header">
+            <h1>Create an Account</h1>
+            <p>Fill in the details below to register.</p>
+        </div>
+
+        <form action="/signup" method="post" id="signupForm" novalidate>
+            <!-- Name Row -->
+            <div class="form-grid-2">
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <div class="input-wrapper">
+                        <input
+                                type="text"
+                                id="firstName"
+                                name="first_name"
+                                class="form-input"
+                                maxlength="30"
+                                required
+                        />
+                    </div>
+                    <ul class="rule-list">
+                        <li class="rule-item invalid" id="rule-firstname">
+                            <span class="rule-icon"></span>
+                            Letters, spaces & hyphens only (1–30 chars)
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <div class="input-wrapper">
+                        <input
+                                type="text"
+                                id="lastName"
+                                name="last_name"
+                                class="form-input"
+                                maxlength="30"
+                                required
+                        />
+                    </div>
+                    <ul class="rule-list">
+                        <li class="rule-item invalid" id="rule-lastname">
+                            <span class="rule-icon"></span>
+                            Letters, spaces & hyphens only (1–30 chars)
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Username -->
+            <div class="form-group">
+                <label for="username">Username</label>
+                <div class="input-wrapper">
+                    <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            class="form-input"
+                            autocomplete="username"
+                            maxlength="20"
+                            required
+                    />
+                </div>
+                <ul class="rule-list">
+                    <li class="rule-item invalid" id="rule-username-len">
+                        <span class="rule-icon"></span>
+                        Between 3 and 20 characters
+                    </li>
+                    <li class="rule-item invalid" id="rule-username-chars">
+                        <span class="rule-icon"></span>
+                        Letters, numbers & underscores only
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-wrapper">
+                    <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="form-input password-input"
+                            autocomplete="new-password"
+                            maxlength="64"
+                            required
+                    />
+                    <button
+                            type="button"
+                            class="toggle-password"
+                            data-target="password"
+                            aria-label="Show password"
+                    >
+                        <svg class="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                             viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                             stroke-linejoin="round">
+                            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </button>
+                </div>
+                <ul class="rule-list">
+                    <li class="rule-item invalid" id="rule-pwd-len">
+                        <span class="rule-icon"></span>
+                        At least 8 characters long
+                    </li>
+                    <li class="rule-item invalid" id="rule-pwd-upper">
+                        <span class="rule-icon"></span>
+                        At least 1 uppercase letter (A-Z)
+                    </li>
+                    <li class="rule-item invalid" id="rule-pwd-lower">
+                        <span class="rule-icon"></span>
+                        At least 1 lowercase letter (a-z)
+                    </li>
+                    <li class="rule-item invalid" id="rule-pwd-number">
+                        <span class="rule-icon"></span>
+                        At least 1 number (0-9)
+                    </li>
+                    <li class="rule-item invalid" id="rule-pwd-special">
+                        <span class="rule-icon"></span>
+                        At least 1 special character (!@#$%^&*)
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Password Confirmation -->
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <div class="input-wrapper">
+                    <input
+                            type="password"
+                            id="confirmPassword"
+                            name="confirm_password"
+                            class="form-input password-input"
+                            autocomplete="new-password"
+                            maxlength="64"
+                            required
+                    />
+                    <button
+                            type="button"
+                            class="toggle-password"
+                            data-target="confirmPassword"
+                            aria-label="Show password"
+                    >
+                        <svg class="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                             viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                             stroke-linejoin="round">
+                            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </button>
+                </div>
+                <ul class="rule-list">
+                    <li class="rule-item invalid" id="rule-pwd-match">
+                        <span class="rule-icon"></span>
+                        Passwords must match
+                    </li>
+                </ul>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">Create Account</button>
+        </form>
+        <div class="signup-footer">
+            <p>Already have an account? <a href="/login">Log in</a></p>
+        </div>
+    </main>
+</div>
+<script>
+    // SVGs for state icons
+    const iconX = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+    const iconCheck = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+
+    // Password Show/Hide Toggle
+    const eyeOpenPath = `<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>`;
+    const eyeOffPath = `<path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.52 13.52 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/>`;
+
+    document.querySelectorAll('.toggle-password').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetId = btn.getAttribute('data-target');
+            const input = document.getElementById(targetId);
+            const eyeIcon = btn.querySelector('.eyeIcon');
+            const isPassword = input.getAttribute('type') === 'password';
+
+            input.setAttribute('type', isPassword ? 'text' : 'password');
+            btn.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
+            eyeIcon.innerHTML = isPassword ? eyeOffPath : eyeOpenPath;
+        });
+    });
+
+    // Form Validation Elements
+    const form = document.getElementById('signupForm');
+    const firstNameInput = document.getElementById('firstName');
+    const lastNameInput = document.getElementById('lastName');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+
+    // Rule Item Helper
+    function setRuleState(elementId, isValid) {
+        const el = document.getElementById(elementId);
+        if (!el) return;
+        const iconSpan = el.querySelector('.rule-icon');
+
+        if (isValid) {
+            el.classList.remove('invalid');
+            el.classList.add('valid');
+            iconSpan.innerHTML = iconCheck;
+        } else {
+            el.classList.remove('valid');
+            el.classList.add('invalid');
+            iconSpan.innerHTML = iconX;
+        }
+    }
+
+    // Validation Logic
+    function validateForm() {
+        const nameRegex = /^[A-Za-z\s\-]{1,30}$/;
+        const usernameCharsRegex = /^[A-Za-z0-9_]+$/;
+
+        // First Name
+        const isFirstNameValid = nameRegex.test(firstNameInput.value.trim());
+        setRuleState('rule-firstname', isFirstNameValid);
+
+        // Last Name
+        const isLastNameValid = nameRegex.test(lastNameInput.value.trim());
+        setRuleState('rule-lastname', isLastNameValid);
+
+        // Username
+        const unameVal = usernameInput.value.trim();
+        setRuleState('rule-username-len', unameVal.length >= 3 && unameVal.length <= 20);
+        setRuleState('rule-username-chars', unameVal.length > 0 && usernameCharsRegex.test(unameVal));
+
+        // Password Rules
+        const pwdVal = passwordInput.value;
+        setRuleState('rule-pwd-len', pwdVal.length >= 8);
+        setRuleState('rule-pwd-upper', /[A-Z]/.test(pwdVal));
+        setRuleState('rule-pwd-lower', /[a-z]/.test(pwdVal));
+        setRuleState('rule-pwd-number', /[0-9]/.test(pwdVal));
+        setRuleState('rule-pwd-special', /[!@#$%^&*(),.?":{}|<>]/.test(pwdVal));
+
+        // Confirm Password
+        const isMatch = pwdVal.length > 0 && pwdVal === confirmPasswordInput.value;
+        setRuleState('rule-pwd-match', isMatch);
+    }
+
+    // Initialize initial icon states
+    document.querySelectorAll('.rule-item').forEach(el => {
+        const iconSpan = el.querySelector('.rule-icon');
+        iconSpan.innerHTML = iconX;
+    });
+
+    // Event Listeners for Live Validation
+    [firstNameInput, lastNameInput, usernameInput, passwordInput, confirmPasswordInput].forEach(input => {
+        input.addEventListener('input', validateForm);
+    });
+
+    // Form Submission Handler
+    form.addEventListener('submit', (e) => {
+        validateForm();
+        const hasInvalidRules = document.querySelectorAll('.rule-item.invalid').length > 0;
+
+        if (hasInvalidRules) {
+            e.preventDefault();
+        }
+    });
+</script>
+{% endblock %}

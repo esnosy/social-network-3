@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Messages{% endblock %}
+
+{% block body %}
+<!-- Messaging Interface Container -->
+<div class="messaging-container">
+
+    <!-- Left Sidebar: Conversations List -->
+    <aside class="chat-sidebar">
+        <div class="sidebar-header">
+            <h2>Messages</h2>
+            <div class="search-box">
+                <!--                <input type="text" class="form-input" placeholder="Search conversations...">-->
+            </div>
+        </div>
+
+        <div class="conversations-list">
+            {% for convo in convos_with_details %}
+            <div onclick="goToConvo({{ convo.convo.id }})"
+                 class="conversation-item {% if convo_id == convo.convo.id %} active {% endif %}">
+                <img src="{{ url_for('static', filename='profile_pic.svg') }}"
+                     alt="{{ convo.other_user.first_name }} {{ convo.other_user.last_name }}" class="avatar">
+                <div class="conversation-info">
+                    <div class="conversation-top">
+                        <span class="user-name">{{ convo.other_user.first_name }} {{ convo.other_user.last_name }}</span>
+                        <span class="time">{{ convo.formatted_latest_message_date }}</span>
+                    </div>
+                    <div class="conversation-bottom">
+                        <p class="preview-text">{{ convo.latest_message.text }}</p>
+                        <!--                        <span class="unread-badge">2</span>-->
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </aside>
+
+    <!-- Center/Main Area: Active Chat Messages -->
+    <main class="chat-main">
+        {% if convo_id is none %}
+        <div style="text-align: center; display: flex; align-items: center; justify-content: center; height: 100%">
+            <p>Select a conversation to start</p>
+        </div>
+        {% else %}
+        <!-- Chat Header -->
+        <header class="chat-header">
+            <div class="chat-header-user">
+                <img src="{{ url_for('static', filename='profile_pic.svg') }}"
+                     alt="{{ active_convo_user.first_name }} {{ active_convo_user.last_name }}" class="avatar">
+                <div class="user-details">
+                    <h3>{{ active_convo_user.first_name }} {{ active_convo_user.last_name }}</h3>
+                    <!--                    <span class="status-indicator online">Online</span>-->
+                </div>
+            </div>
+            <div class="chat-header-actions">
+                <!--                <button class="chat-action-btn" aria-label="Call">📞</button>-->
+                <!--                <button class="chat-action-btn" aria-label="More options">⋮</button>-->
+            </div>
+        </header>
+
+        <!-- Scrollable Messages Area -->
+        <div class="chat-messages">
+            {% for message in messages %}
+            {% if message.sender == active_convo_user.id %}
+            {% set message_class = "incoming" %}
+            {% else %}
+            {% set message_class = "outgoing" %}
+            {% endif %}
+            <div class="message {{ message_class }}">
+                <img src="{{ url_for('static', filename='profile_pic.svg') }}"
+                     class="avatar avatar-sm">
+                <div class="message-content">
+                    <p dir="auto">{{ message.text }}</p>
+                    <span class="message-time">{{ get_message_time_text(message.created_at) }}</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+
+        <!-- Chat Input Footer -->
+        <form class="chat-input-area" action="/message" method="post">
+            <input type="hidden" name="convo_id" value="{{ convo_id }}">
+            <label class="chat-input">
+                                   <textarea dir="auto"
+                                             oninput="this.style.height='';this.style.height=this.scrollHeight + 'px';"
+                                             style="resize: none; width: 100%; overflow: hidden" name="text"
+                                             required></textarea>
+            </label>
+            <button type="submit" class="submit-btn send-btn">Send</button>
+        </form>
+        {% endif %}
+    </main>
+</div>
+
+<script>
+    function goToConvo(convoId) {
+        window.location.href = `messages?id=${convoId}`
+    }
+</script>
+{% endblock %}

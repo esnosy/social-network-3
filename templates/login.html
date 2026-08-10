@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+
+{% block body %}
+<div class="login-wrapper">
+    <main class="login-card">
+        <div class="login-header">
+            <h1>Welcome back</h1>
+            <p>Please enter your credentials to log in.</p>
+        </div>
+
+        <form action="/login" method="post">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <div class="input-wrapper">
+                    <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            class="form-input"
+                            autocomplete="username"
+                            required
+                    />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-wrapper">
+                    <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="form-input password-input"
+                            autocomplete="current-password"
+                            required
+                    />
+                    <button
+                            type="button"
+                            id="togglePassword"
+                            class="toggle-password"
+                            aria-label="Show password"
+                    >
+                        <!-- Eye icon (Default) -->
+                        <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                             stroke-linejoin="round">
+                            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Sign In</button>
+        </form>
+        <div class="login-footer">
+            <p>Don't have an account? <a href="/signup">Sign up</a></p>
+        </div>
+    </main>
+</div>
+
+<script>
+    const togglePasswordBtn = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+    const eyeIcon = document.getElementById('eyeIcon');
+
+    // SVG paths for open and closed eye icons
+    const eyeOpenPath = `<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>`;
+    const eyeOffPath = `<path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.52 13.52 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/>`;
+
+    togglePasswordBtn.addEventListener('click', () => {
+        const isPassword = passwordInput.getAttribute('type') === 'password';
+
+        // Toggle input type
+        passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+
+        // Toggle visual state and accessibility attributes
+        togglePasswordBtn.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
+        eyeIcon.innerHTML = isPassword ? eyeOffPath : eyeOpenPath;
+    });
+</script>
+
+{% endblock %}
