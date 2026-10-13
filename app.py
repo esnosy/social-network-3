@@ -1,20 +1,27 @@
-import os
-from datetime import datetime
-from calendar import month_name
 import math
+import os
+import re
+from calendar import month_name
+from collections.abc import Sequence
+from datetime import datetime
 from functools import wraps
 from hashlib import sha256
 from secrets import token_hex
-import re
-from time import strftime
-from typing import Sequence
 
 from dotenv import load_dotenv
-from flask import Flask, session, request, url_for, redirect, render_template, flash, abort
-from sqlalchemy import create_engine, select, func, or_, and_
+from flask import (
+    Flask,
+    abort,
+    flash,
+    redirect,
+    render_template,
+    request,
+    session,
+)
+from sqlalchemy import and_, create_engine, func, or_, select
 from sqlalchemy.orm import Session
 
-from models import Base, User, Post, PostLikes, Comment, Conversation, Message
+from models import Base, Comment, Conversation, Message, Post, PostLikes, User
 
 load_dotenv()
 
@@ -478,6 +485,7 @@ def create_comment():
     post_id = request.form.get("post_id")
     if post_id is None:
         abort(422)
+    post_id = int(post_id)
     post_stmt = select(Post).where(Post.id == post_id)
     with Session(engine) as db_session:
         post = db_session.scalars(post_stmt).one_or_none()
@@ -622,4 +630,4 @@ def send_message():
             db_session.add(convo)
             db_session.commit()
 
-        return redirect(f"/messages?id={convo.id}")
+            return redirect(f"/messages?id={convo.id}")
